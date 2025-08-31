@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>File converter/compressor</title>
+<link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<!--
+<h2>File converter/compressor</h2>
+<form id="convertForm" method="post" action="/convert" enctype="multipart/form-data">
+    <h3>Convert</h3>
+<input type="file" id="fileInput" name="images" multiple>
+<select id="extDropdown" name="ext">
+<option value="jpg">jpg</option>
+<option value="png">png</option>
+<option value="jpeg">jpeg</option>
+hi<option value="mp3">mp3</option>
+<option value="mp4">mp4</option>
+<option value="mkv">mkv</option>
+</select>
+<button type="submit">Convert</button>
+</form>
+-->
+<form id="compressForm" enctype="multipart/form-data">
+<h3>Compress</h3>
+<input type="file" id="fileInput">
+<input type="text" id="size" placeholder="enter the size">
+<select id="qualityDropdown">
+<option value="high">high</option>
+<option value="medium">medium</option>
+<option value="low">low</option>
+</select>
+<button type="submit">Compress</button>
+</form>
+
+<script src="../static/script.js"></script>
+</body>
+</html>
