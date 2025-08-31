@@ -11,6 +11,7 @@ input.addEventListener("change", (event) => {
 
     files.forEach((file, i) => {
         orderedFiles.push(file);
+        //document.write(file.name)
     });
 });
 
