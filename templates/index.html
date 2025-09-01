@@ -9,25 +9,26 @@
 <body>
 
 <h2>File converter/compressor</h2>
+
+<div class="toggle">
+  <button class="value" id="convertBtn">
+    Convert
+  </button>
+  <button class="value" id="compressBtn">
+    Compress
+  </button>
+</div>
+
 <form id="convertForm" method="post" action="/convert" enctype="multipart/form-data">
-    <h3>Convert</h3>
 <input type="file" id="fileInput" multiple>
-<select id="extDropdown">
-<option value="jpg">jpg</option>
-<option value="png">png</option>
-<option value="jpeg">jpeg</option>
-<option value="mp3">mp3</option>
-<option value="mp4">mp4</option>
-<option value="mkv">mkv</option>
+<select id="ext">
 </select>
 <button type="submit">Convert</button>
 </form>
-
 <form id="compressForm" enctype="multipart/form-data">
-<h3>Compress</h3>
 <input type="file" id="fileInput" multiple>
-<input type="text" id="size" placeholder="enter the size">
-<select id="qualityDropdown">
+<input type="text" id="size" placeholder="Enter the size">
+<select id="quality">
 <option value="high">high</option>
 <option value="medium">medium</option>
 <option value="low">low</option>

@@ -1,42 +1,56 @@
 const convertForm = document.querySelector("#convertForm")
 const convertInput = document.querySelector("#convertForm #fileInput")
-const extDropdown = document.querySelector("#extDropdown")
+const ext = document.querySelector("#ext")
 
 const compressForm = document.querySelector("#compressForm")
 const compressInput = document.querySelector("#compressForm #fileInput")
 const size = document.querySelector("#size")
-const qualityDropdown = document.querySelector("#qualityDropdown")
+const quality = document.querySelector("#quality")
+
+const toggle = document.querySelector(".toggle")
+const convertBtn = document.querySelector("#convertBtn")
+const compressBtn = document.querySelector("#compressBtn")
 
 let orderedFiles = []
 let exts = []
 const image_ext = ['jpg', 'png', 'jpeg']
 const video_ext = ['mp4', 'mkv', 'avi']
 
-size.style.display = 'none'
-qualityDropdown.style.display = 'none'
+const reset = ()=> {
+    orderedFiles = []
+    exts = []
+    size.style.display = 'none'
+    quality.style.display = 'none'
+    ext.style.display = 'none'
+    convertForm.style.display = 'none'
+    compressForm.style.display = 'none'
+}
+
+reset()
+convertForm.style.display = ''
 
 const appendFiles = (event) => {
     const files = Array.from(event.target.files)
     orderedFiles = [] // reset
-    exts=[]
-    
+    exts = []
+
     files.forEach((file, i) => {
         orderedFiles.push(file)
         exts.push(file.name.slice(file.name.indexOf('.')+1))
     })
-    size.style.display = 'none'
-    qualityDropdown.style.display = 'none'
 
     if (image_ext.includes(exts[0])) {
         size.style.display = 'flex'
-        extDropdown.innerHTML = `
+        ext.style.display = 'flex'
+        ext.innerHTML = `
         <option value="jpg">jpg</option>
         <option value="png">png</option>
         <option value="jpeg">jpeg</option>
         `
     } else if (video_ext.includes(exts[0])) {
-        qualityDropdown.style.display = 'flex'
-        extDropdown.innerHTML = `
+        quality.style.display = 'flex'
+        ext.style.display = 'flex'
+        ext.innerHTML = `
         <option value="mp3">mp3</option>
         <option value="mp4">mp4</option>
         <option value="mkv">mkv</option>
@@ -53,12 +67,12 @@ const submitForm = (event, route)=> {
     })
 
     if (route == "/convert") {
-        formData.append("ext", extDropdown.value)
-    }else if (route == "/compress") {
+        formData.append("ext", ext.value)
+    } else if (route == "/compress") {
         if (image_ext.includes(exts[0])) {
             formData.append("size", parseInt(size.value))
         } else if (video_ext.includes(exts[0])) {
-            formData.append("quality", qualityDropdown.value)
+            formData.append("quality", quality.value)
         }
     }
 
@@ -90,4 +104,18 @@ convertForm.addEventListener("submit", (event) => {
 })
 compressForm.addEventListener("submit", (event) => {
     submitForm(event, "/compress")
+})
+
+convertBtn.addEventListener("click", ()=> {
+    reset()
+    convertForm.style.display = ''
+    convertBtn.classList.add("active-value")
+    compressBtn.classList.remove("active-value")
+})
+
+compressBtn.addEventListener("click", ()=> {
+    reset()
+    compressForm.style.display = ''
+    compressBtn.classList.add("active-value")
+    convertBtn.classList.remove("active-value")
 })
