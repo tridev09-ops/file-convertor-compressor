@@ -11,13 +11,30 @@ import ffmpeg, os, zipfile
 
 app = Flask(__name__)
 
-DOWNLOAD_FOLDER = "download"
+DOWNLOAD_FOLDER = "static/download"
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/delete")
+def delete():
+    @after_this_request
+    def remove_files(response):
+        try:
+            for filename in os.listdir(DOWNLOAD_FOLDER):
+                filepath = os.path.join(DOWNLOAD_FOLDER, filename)
+                if os.path.isfile(filepath):
+                    os.remove(filepath)
+
+        except Exception as e:
+            app.logger.error("Error cleaning folder: %s", e)
+        
+        return response
+    
+    return jsonify("Files deleted successfully")
 
 
 @app.route("/convert", methods=["POST"])
@@ -84,34 +101,15 @@ def convert():
                 (
                     ffmpeg.input(input_path)
                     .output(output_path, qscale=20)
-                    .run(overwrite_output=True)
+                    .run()
                 )
 
-        @after_this_request
-        def remove_files(response):
-            try:
-                for filename in os.listdir(DOWNLOAD_FOLDER):
-                    filepath = os.path.join(DOWNLOAD_FOLDER, filename)
-                    if os.path.isfile(filepath):
-                        os.remove(filepath)
-
-            except Exception as e:
-                app.logger.error("Error cleaning folder: %s", e)
-
-            return response
-
-        if len(files_list) > 1:
-            zip_path = os.path.join(DOWNLOAD_FOLDER, "converted_files.zip")
-
-            with zipfile.ZipFile(zip_path, "w") as zipf:
-                for file in files_list:
-                    zipf.write(
-                        file["output_path"], os.path.basename(file["output_name"])
-                    )
-
-            return send_file(zip_path, as_attachment=True)
-        else:
-            return send_file(files_list[0]["output_path"], as_attachment=True)
+        output_list=[]
+        for file in files_list:
+            output_list.append(file["output_path"])
+        
+        print(output_list)
+        return jsonify(output_list)
 
     except Exception as e:
         print(str(e))
@@ -218,35 +216,16 @@ def compress():
                         .run(overwrite_output=True)
                     )
 
-        @after_this_request
-        def remove_files(response):
-            try:
-                for filename in os.listdir(DOWNLOAD_FOLDER):
-                    filepath = os.path.join(DOWNLOAD_FOLDER, filename)
-                    if os.path.isfile(filepath):
-                        os.remove(filepath)
-
-            except Exception as e:
-                app.logger.error("Error cleaning folder: %s", e)
-
-            return response
-
-        if len(files_list) > 1:
-            zip_path = os.path.join(DOWNLOAD_FOLDER, "compressed_files.zip")
-
-            with zipfile.ZipFile(zip_path, "w") as zipf:
-                for file in files_list:
-                    zipf.write(
-                        file["output_path"], os.path.basename(file["output_name"])
-                    )
-
-            return send_file(zip_path, as_attachment=True)
-        else:
-            return send_file(files_list[0]["output_path"], as_attachment=True)
+        output_list=[]
+        for file in files_list:
+            output_list.append(file["output_path"])
+        
+        print(output_list)
+        return jsonify(output_list)
 
     except Exception as e:
         return jsonify({"error": str(e)})
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000)
