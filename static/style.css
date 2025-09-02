@@ -1,12 +1,24 @@
-:root {
-    --main: #2694ed;
-    --button-hover: #1070dc;
-    --black: #111;
-    --white: ghostwhite;
-    --body-bg: darkgray;
-    --input-bg: #ccc;
-    --gray: gray;
+body {
+    --main: #1070dc;
+    --btn-hover: #2590ed;
+    --btn-text: ghostwhite;
     --font: Arial;
+
+    --text: #111;
+    --body-bg: #eee;
+    --input-bg: ghostwhite;
+    --gray: gray;
+}
+.dark {
+    --main: #1070dc;
+    --btn-hover: #2590ed;
+    --btn-text: ghostwhite;
+    --font: Arial;
+
+    --text: #f5f5f5;
+    --body-bg: #252525;
+    --input-bg: #404040;
+    --gray: gray;
 }
 body {
     padding: 0;
@@ -18,7 +30,7 @@ body {
     background-color: var(--body-bg);
     font-family: var(--font);
 }
-h2{
+h2 {
     color: var(--main);
     text-align: center;
 }
@@ -28,25 +40,29 @@ form {
     width: 85%;
     margin: 0 auto;
 }
-form *{
+form * {
     font-size: 1.1rem;
     margin: 5px 0;
     padding: 15px 10px;
     border-radius: 10px;
     border: 1px solid var(--gray);
-    color: var(--black);
+    color: var(--text);
     background-color: var(--input-bg);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 button[type="submit"] {
     margin-top: 10px;
     background-color: var(--main);
-    color: var(--white);
+    color: var(--btn-text);
     font-weight: 400;
     border: none;
 }
 button[type="submit"]:hover {
-    background-color: var(--button-hover);
+    background-color: var(--btn-hover);
+}
+input[type="file"]::file-selector-button {
+    all: unset;
+    display: none;
 }
 input:focus, select:focus {
     outline: 2px solid var(--main);
@@ -56,9 +72,7 @@ select {
     justify-content: center;
     text-align: center;
 }
-input[type=["file"]]{
-}
-.toggle {
+.toggleForm {
     display: flex;
     justify-content: center;
     width: fit-content;
@@ -69,14 +83,14 @@ input[type=["file"]]{
     background-color: transparent;
     border: none;
     padding: 10px;
-    color: var(--black);
+    color: var(--text);
     font-size: 1rem;
     font-weight: 500;
     margin: 0 10px;
     transition: all .4s ease;
     border-bottom: 4px solid transparent;
 }
-.active-value{
+.active-value {
     color: var(--main);
     border-bottom: 4px solid var(--main);
 }
@@ -84,4 +98,79 @@ input[type=["file"]]{
 .value:active {
     color: var(--main);
     border-bottom: 4px solid var(--main);
+}
+#responseDiv {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+#responseDiv button {
+    border: 2px solid var(--main);
+    color: var(--main);
+    background-color: transparent;
+    font-size: 1.1rem;
+    font-weight: 400;
+    padding: 10px 12px;
+    border-radius: 5px;
+}
+#loader-container {
+    display: none;
+    place-content: center;
+    padding: 15px;
+}
+.loader {
+    border: 5px solid var(--main);
+    border-left: 5px solid transparent;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+@keyframes spin {
+    0% {
+        rotate: 0deg;
+    }
+    100% {
+        rotate: 360deg;
+    }
+}
+.switch {
+    font-size: 12px;
+    position: relative;
+    width: 3.5em;
+    height: 2em;
+    margin: 10px 30px 10px auto;
+}
+.switch input {
+    display: none;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0 0 0 0;
+    background-color: var(--input-bg);
+    border: 1px solid var(--gray);
+    transition: .4s ease;
+    border-radius: 30px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.4em;
+    width: 1.4em;
+    border-radius: 20px;
+    inset: .2em;
+    background-color: var(--gray);
+    transition: .4s ease;
+}
+input:checked + .slider {
+    background-color: var(--main);
+    border: 1px solid var(--main);
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--main);
+}
+input:checked + .slider:before {
+    transform: translateX(1.4em);
+    background-color: #fff;
 }
